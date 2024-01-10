@@ -1,4 +1,6 @@
-# React + TypeScript + Vite
+# React + TypeScript + Tailwind + Shadcn-UI + Storybook + Vite
+
+## Vite Config Guide
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
