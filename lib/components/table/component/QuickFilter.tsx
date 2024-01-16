@@ -3,7 +3,7 @@ import React from 'react'
 import { Column, RowData, Table } from '@tanstack/react-table'
 
 import { DebouncedInput } from './DebouncedInput'
-import { ComboBox, ComboBoxItem } from '../../ComboBox'
+import { Combobox } from '@/components/comboBox'
 
 type NumberInputProps = {
   columnFilterValue: [number, number]
@@ -66,17 +66,17 @@ const TextInput = <T,>({
 }: TextInputProps<T>) => {
   // const dataListId = columnId + 'list'
 
-  const changeHandler = (val: ComboBoxItem) => {
+  const changeHandler = (val: string) => {
     column.columnDef.filterFn = "includesString"
-    column.setFilterValue(val.id)
+    column.setFilterValue(val)
   }
 
   return (
     <div className='text-left w-full p-2'>
-      <ComboBox
-        selectedIndex={sortedUniqueValues.indexOf(columnFilterValue)}
+      <Combobox
+        selectedVal={columnFilterValue}
         placeholder={`Search... (${columnSize})`}
-        items={sortedUniqueValues.map(single => ({ id: single, name: single }))}
+        items={sortedUniqueValues.map(single => ({ label: single, value: single }))}
         onChange={changeHandler}
       />
       <div className="h-1" />

@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 
-import { Checkbox } from "../../Checkbox";
-import DebouncedInput from "./DebouncedInput";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DebouncedInput } from "./DebouncedInput";
 
 export interface MultiTextSearchItem {
   id: string;
@@ -11,17 +10,17 @@ export interface MultiTextSearchItem {
   isChecked?: boolean;
 }
 
-interface MultiTextSearchProps<T> {
+interface MultiTextSearchProps {
   items: MultiTextSearchItem[];
-  onChange: (SelectItems: T) => void;
+  onChange: (SelectItems: MultiTextSearchItem) => void;
   placeholder: string;
 }
 
-export const MultiTextSearch = <T,>({
+export const MultiTextSearch = ({
   items,
   onChange,
   placeholder
-}: MultiTextSearchProps<T>) => {
+}: MultiTextSearchProps) => {
 
   const [query, setQuery] = useState('');
 
@@ -36,18 +35,18 @@ export const MultiTextSearch = <T,>({
         return item.label.toLowerCase().includes(query.toLowerCase())
       })
 
-  const checkboxHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedItem: T = JSON.parse(e.target.dataset.item!)
+  const checkboxHandler = (checked: boolean, selectedItem: MultiTextSearchItem) => {
     onChange({
       ...selectedItem,
-      isChecked: e.target.checked
+      isChecked: checked
     })
   }
 
   return <section className="p-2">
     <DebouncedInput value={""} placeholder={placeholder} onChange={changeHandler} />
-    <section className="h-40 overflow-y-scroll">
-      <Checkbox items={filteredItem} dense={true} onChange={checkboxHandler} />
+    <section className="h-40 overflow-y-scroll mt-2">{
+      filteredItem.slice(0, 100).map((single, i) => <p className="flex items-center text-gray-700" key={i}><Checkbox id={single.id} onCheckedChange={(checked: boolean) => checkboxHandler(checked, single)} /><label className="ml-2" htmlFor={single.id}>{single.label}</label></p>)
+    }
     </section>
   </section>
 }

@@ -1,9 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { Column, Table } from "@tanstack/react-table";
 
 import { DebouncedInput } from "./DebouncedInput";
-import { Select, SelectItem } from "../../Select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { getConditionalFilterFn } from "../util/util";
 
 export interface ConditionalFilterItem {
@@ -58,10 +63,7 @@ export const ConditionalFilter = <T,>({
   const columnFilterValue = column.getFilterValue();
   const items = Object.values(typeof firstValue === 'number' ? selectNumberItems : selectTextItems).filter(val => isNaN(val as number))
 
-  const selectedIndex = (columnFilterValue as FilterValueType)?.type ? items.indexOf((columnFilterValue as FilterValueType).type) : -1;
   const [condition, setcondition] = useState((columnFilterValue as FilterValueType)?.type || "");
-  //typeof firstValue === 'number';
-
 
   const makeFilterCall = (val: string | number, type: FilterType) => {
     if (val) {
@@ -77,23 +79,22 @@ export const ConditionalFilter = <T,>({
     makeFilterCall(val, condition);
   }
 
-  const selectChangeHandler = (val: SelectItem) => {
-    setcondition(val.name as keyof typeof selectTextItems);
+  const selectChangeHandler = (val: string) => {
+    setcondition(val as keyof typeof selectTextItems);
     if ((columnFilterValue as FilterValueType)?.val) {
-      makeFilterCall((columnFilterValue as FilterValueType)?.val, val.name as FilterType);
+      makeFilterCall((columnFilterValue as FilterValueType)?.val, val as FilterType);
     }
   }
 
   return <section className="p-2">
-    <Select
-      items={items.map((single, i) => ({
-        id: i,
-        name: single as string
-      }))}
-      selectedIndex={selectedIndex}
-      onChange={selectChangeHandler}
-      placeholder="Select"
-    />
+    <Select onValueChange={selectChangeHandler} defaultValue={columnFilterValue as string}>
+      <SelectTrigger className="mb-2">
+        <SelectValue placeholder="Select" />
+      </SelectTrigger>
+      <SelectContent>
+        {items.map((single, i) => <SelectItem key={i} value={single}>{single}</SelectItem>)}
+      </SelectContent>
+    </Select>
     <DebouncedInput disabled={condition ? false : true} placeholder="Filter" value={(columnFilterValue as FilterValueType)?.val ? (columnFilterValue as FilterValueType)?.val : ""} onChange={changeHandler} />
   </section>
 }

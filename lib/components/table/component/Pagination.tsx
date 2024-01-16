@@ -1,4 +1,10 @@
-import { Select } from "../../Select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type Props = {
   hasNextPage: boolean
@@ -80,16 +86,14 @@ export function Pagination({
             />
           </div>
         </div>
-        <Select
-          selectedIndex={[10, 20, 30, 40, 50].indexOf(pageSize)}
-          onChange={e => {
-            setPageSize(Number(e.name))
-          }}
-          items={[10, 20, 30, 40, 50].map((item, i) => ({
-            id: i,
-            name: item.toString()
-          }))}
-        />
+        <Select onValueChange={(val: string) => setPageSize(parseInt(val))} defaultValue={pageSize.toString()}>
+          <SelectTrigger className="w-[80px]" >
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+          <SelectContent>
+            {[10, 20, 30, 40, 50].map((item, i) => (<SelectItem key={i} value={item.toString()}>{item}</SelectItem>))}
+          </SelectContent>
+        </Select>
       </div>
       <div className="text-sm">Total Rows: {totalRows}</div>
     </section >
