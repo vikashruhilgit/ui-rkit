@@ -37,7 +37,6 @@ interface TableProps<T> {
   className?: string
 }
 
-
 export const Table = <T,>({
   columns,
   data,

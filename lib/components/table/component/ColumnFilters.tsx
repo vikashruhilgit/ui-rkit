@@ -33,7 +33,7 @@ export function ColumnFilters<T extends RowData>({ header, table }: Props<T>) {
       {!isNumber && <TabsTrigger className='flex-1' value="multi">Multi</TabsTrigger>}
       <TabsTrigger className='flex-1' value="condition">Condition</TabsTrigger>
     </TabsList>
-    <TabsContent value="quick">
+    <TabsContent asChild value="quick">
       <QuickFilter
         column={header.column}
         table={table}

@@ -1,3 +1,4 @@
+import { fn } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Table } from '../../lib/components/table/Table';
 import { Person, columns, makeData } from './tableData';
@@ -29,6 +30,7 @@ export const Example: Story = {
     columns: addIndeterminateCheckbox(columns),
     data: makeData(1000),
     testMode: true,
-    enableResize: true
+    enableResize: true,
+    onSelectionChange: fn()
   },
 };

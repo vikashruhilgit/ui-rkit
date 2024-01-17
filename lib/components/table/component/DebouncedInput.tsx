@@ -14,7 +14,6 @@ export const DebouncedInput: React.FC<Props> = ({
   debounce = 500,
   ...props
 }) => {
-  console.log("render DebouncedInput -----");
   const [value, setValue] = useState<number | string>(initialValue)
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) =>
