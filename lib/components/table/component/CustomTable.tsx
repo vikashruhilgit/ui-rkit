@@ -12,6 +12,7 @@ import { Filter } from 'lucide-react';
 import { Pagination } from './Pagination'
 import { ColumnFilters } from './ColumnFilters'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/utils';
 
 // import TablePins from './TablePins'
 
@@ -47,12 +48,14 @@ type Props<T extends RowData> = {
   table: Table<T>
   tableGroup?: TableGroup;
   enableResize?: boolean
+  className?: string
 }
 
 export function CustomTable<T extends RowData>({
   table,
   tableGroup,
-  enableResize
+  enableResize,
+  className
 }: Props<T>) {
   const [headerGroups] = getTableHeaderGroups(table, tableGroup);
   const headerDepth = headerGroups.length;
@@ -70,18 +73,21 @@ export function CustomTable<T extends RowData>({
 
   const renderFiltersPopover = (header: Header<T, unknown>) => {
     const isFilterApplied = header.column.getIsFiltered();
+    console.log("hello render- ---");
+
     return <>
       {header.column.getCanFilter() ? (
         <Popover>
-          <PopoverTrigger>
-            <Filter className={`${isFilterApplied && "text-orange-500"} ml-2 h-4 w-4`} />
+          <PopoverTrigger asChild>
+            <Filter className={`${isFilterApplied && "text-orange-500"} ml-2 h-4 w-4 cursor-pointer`} />
           </PopoverTrigger>
           <PopoverContent><section className='bg-gray-100 shadow-sm rounded border border-gray-200'>
             <ColumnFilters<T> header={header} table={table} />
             <p className='p-2 text-right'>
               <Button variant="destructive" onClick={() => header.column.setFilterValue("")}>Reset</Button>
             </p>
-          </section></PopoverContent>
+          </section>
+          </PopoverContent>
         </Popover>
       ) : null
       }
@@ -93,8 +99,12 @@ export function CustomTable<T extends RowData>({
     const headerClass = getHeaderClass(header.depth, isNumber);
 
     return (
-      <section onClick={header.column.getCanSort() ? header.column.getToggleSortingHandler() : () => null} className={`${header.column.getCanSort() ? 'cursor-pointer select-none'
-        : ''} flex ${headerClass} whitespace-nowrap`}>
+      <section onClick={header.column.getCanSort() ? header.column.getToggleSortingHandler() : () => null} className={
+        cn("flex whitespace-nowrap",
+          header.column.getCanSort() ? 'cursor-pointer select-none' : "",
+          headerClass
+        )
+      }>
         {!isNumber &&
           flexRender(
             header.column.columnDef.header,
@@ -110,18 +120,20 @@ export function CustomTable<T extends RowData>({
             </svg>,
           }[header.column.getIsSorted() as string] ?? ' '}
         </button>
-        {isNumber &&
+        {
+          isNumber &&
           flexRender(
             header.column.columnDef.header,
             header.getContext()
-          )}
-      </section>
+          )
+        }
+      </section >
     )
   }
 
   return (
-    <section className='border border-slate-200 rounded-md'>
-      <section className='max-w-full min-w-full'>
+    <>
+      <section className={cn('border border-slate-200 rounded-md max-w-full min-w-full', className)}>
         <table className='border-none text-slate-800 text-sm w-full'>
           <thead className="divide-y divide-gray-200 bg-gray-100">
             {headerGroups.map(headerGroup => (
@@ -223,7 +235,7 @@ export function CustomTable<T extends RowData>({
         setPageSize={table.setPageSize}
         totalRows={table.getPrePaginationRowModel().rows.length}
       />
-    </section >
+    </ >
   )
 }
 

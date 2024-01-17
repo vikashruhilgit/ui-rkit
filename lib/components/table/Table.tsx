@@ -34,6 +34,7 @@ interface TableProps<T> {
   onColumnFilterChange?: (i: ColumnFiltersState) => void;
   onGlobalFilterChange?: (i: string) => void;
   onSelectionChange?: (i: RowModel<T>) => void;
+  className?: string
 }
 
 
@@ -45,7 +46,8 @@ export const Table = <T,>({
   serverSideFilter,
   onColumnFilterChange,
   onSelectionChange,
-  onGlobalFilterChange
+  onGlobalFilterChange,
+  className
 }: TableProps<T>) => {
 
   const rerender = useReducer(() => ({}), {})[1]
@@ -133,7 +135,7 @@ export const Table = <T,>({
   return (
     <>
       <TableAction table={table} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
-      <div className={`flex justify-center`}>
+      <>
         {/* <div className={`flex justify-center ${isSplit ? 'gap-4' : ''}`}>
         {isSplit ? <CustomTable table={table} tableGroup="left" /> : null} 
         <CustomTable
@@ -141,11 +143,12 @@ export const Table = <T,>({
           tableGroup={isSplit ? 'center' : undefined}
         /> */}
         <CustomTable
+          className={className}
           table={table}
           enableResize={enableResize}
         />
         {/* {isSplit ? <CustomTable table={table} tableGroup="right" /> : null} */}
-      </div>
+      </>
       {testMode &&
         <>
           <div className="p-2" />
