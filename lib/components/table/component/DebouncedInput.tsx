@@ -14,21 +14,27 @@ export const DebouncedInput: React.FC<Props> = ({
   debounce = 500,
   ...props
 }) => {
+  console.log("render DebouncedInput -----");
   const [value, setValue] = useState<number | string>(initialValue)
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setValue(event.target.value)
+    setValue(event.target.value);
 
   useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
+    initialValue &&
+      setValue(initialValue)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      onChange(value)
-    }, debounce)
+    if (value) {
+      const timeout = setTimeout(() => {
+        onChange(value)
+      }, debounce)
 
-    return () => clearTimeout(timeout)
+      return () => clearTimeout(timeout)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 

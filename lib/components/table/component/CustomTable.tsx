@@ -1,4 +1,3 @@
-import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import {
   flexRender,
   Header,
@@ -12,6 +11,8 @@ import { Filter } from 'lucide-react';
 import { Pagination } from './Pagination'
 import { ColumnFilters } from './ColumnFilters'
 import { Button } from '@/components/ui/button'
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+
 import { cn } from '@/utils';
 
 // import TablePins from './TablePins'
@@ -73,7 +74,6 @@ export function CustomTable<T extends RowData>({
 
   const renderFiltersPopover = (header: Header<T, unknown>) => {
     const isFilterApplied = header.column.getIsFiltered();
-    console.log("hello render- ---");
 
     return <>
       {header.column.getCanFilter() ? (
